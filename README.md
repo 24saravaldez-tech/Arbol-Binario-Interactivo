@@ -1,1 +1,2 @@
-<img width="1550" height="772" alt="Captura desde 2026-07-01 12-22-55" src="https://github.com/user-attachments/assets/73fcea95-4ece-4ea2-a02b-adf616d8657d" />
+<img width="1806" height="767" alt="image" src="https://github.com/user-attachments/assets/1666e948-eaa8-4bd8-af23-82e50c859f16" />
+
