@@ -78,12 +78,43 @@ class BinaryTree {
             ordenar(hijo.left) //se llama, se llama y se llama hasta que sea null.
             enOrden.push(hijo.value) //cuando es null, se regresa al ultimo valor y lo empuja
             ordenar(hijo.right)
-
-            //va recorriendo todas las izquierdas hasta que sea nulo,
-            //cuando llegue el caso, vuelve a la derecha.
         }
 
         ordenar(this.root) //el valor inicial
+        return enOrden;
+    }
+
+    preOrder() {
+        let enOrden = [];
+
+        function ordenar(hijo) {
+            if (hijo == null) {
+                return
+            }
+
+            enOrden.push(hijo.value)
+            ordenar(hijo.left)
+            ordenar(hijo.right)
+        }
+
+        ordenar(this.root)
+        return enOrden;
+    }
+
+    postOrder() {
+        let enOrden = [];
+
+        function ordenar(hijo) {
+            if (hijo == null) {
+                return
+            }
+
+            ordenar(hijo.left)
+            ordenar(hijo.right)
+            enOrden.push(hijo.value)
+        }
+
+        ordenar(this.root)
         return enOrden;
     }
 
@@ -134,7 +165,9 @@ let botonGuardar = document.querySelector('#btn-insertar')
 let contenedorTree = document.querySelector('#tree-root-container')
 let numeroABuscar = document.querySelector('#input-buscar')
 let botonBuscar = document.querySelector('#btn-buscar')
-let botonMostrar = document.querySelector('#btn-inorder')
+let botonMostrarIn = document.querySelector('#btn-inorder')
+let botonMostrarPre = document.querySelector('#btn-preorder')
+let botonMostrarPost = document.querySelector('#btn-postorder')
 let modal = document.querySelector('#modalAlerta')
 let botonLimpiar = document.querySelector('#btn-eliminar')
 
@@ -172,20 +205,59 @@ botonLimpiar.addEventListener('click', (event) => {
 
 let index = 0
 
-botonMostrar.addEventListener('click', (event) => {
+botonMostrarIn.addEventListener('click', (event) => {
     if (arbolBinario.inOrder().length == 0) {
         alert('No hay valores aun')
     } else {
-        mostrar()
+        let longitud = []
+        longitud = arbolBinario.inOrder()
+        mostrar(longitud)
+    }
+})
+
+botonMostrarPost.addEventListener('click', (event) => {
+    if (arbolBinario.postOrder().length == 0) {
+        alert('No hay valores aun')
+    } else {
+        let longitud = []
+        longitud = arbolBinario.postOrder()
+        mostrar(longitud)
+    }
+})
+
+botonMostrarPre.addEventListener('click', (event) => {
+    if (arbolBinario.preOrder().length == 0) {
+        alert('No hay valores aun')
+    } else {
+        let longitud = []
+        longitud = arbolBinario.preOrder()
+        mostrar(longitud)
     }
 })
 
 
+// function mostrar() {
+//     let longitud = []
+//     longitud = arbolBinario.inOrder()
+//     //  console.log(longitud)
+//     contenedorTree.innerHTML = arbolBinario.renderizar(arbolBinario.root, longitud[index])
+//     //console.log(longitud[index])
 
-function mostrar() {
-    let longitud = []
-    longitud = arbolBinario.inOrder()
-  //  console.log(longitud)
+//     setTimeout(() => {
+//         if (index < longitud.length) {
+//             index++
+//             contenedorTree.innerHTML = ''
+//             mostrar()
+//         } else {
+//             index = 0
+//         }
+//     }, 1500)
+
+// }
+
+function mostrar(longitud) {
+
+    //  console.log(longitud)
     contenedorTree.innerHTML = arbolBinario.renderizar(arbolBinario.root, longitud[index])
     //console.log(longitud[index])
 
@@ -193,7 +265,7 @@ function mostrar() {
         if (index < longitud.length) {
             index++
             contenedorTree.innerHTML = ''
-            mostrar()
+            mostrar(longitud)
         } else {
             index = 0
         }
