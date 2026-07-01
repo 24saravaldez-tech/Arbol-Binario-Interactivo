@@ -192,11 +192,13 @@ botonBuscar.addEventListener('click', (event) => {
         alert('Ingrese un numero dentro del campo para poder buscarlo')
     } else if (arbolBinario.inOrder().length == 0) {
         alert('No tiene numeros ingresados aun')
-    } else if (arbolBinario.renderizar(arbolBinario.root, parseInt(numeroABuscar.value)).includes('no-tiene')) {
-        alert('No se encontro ninguna coincidencia')
     } else {
         contenedorTree.innerHTML = ''
         contenedorTree.innerHTML = `<div class="tree-node">${arbolBinario.renderizar(arbolBinario.root, parseInt(numeroABuscar.value))}</div>`;
+    }
+
+    if (arbolBinario.renderizar(arbolBinario.root, parseInt(numeroABuscar.value)).includes('no-tiene')) {
+        alert('No se encontro ninguna coincidencia')
     }
 })
 
