@@ -1,0 +1,202 @@
+class Nodo {
+    constructor(value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class BinaryTree {
+    constructor() {
+        this.root = null;
+    }
+
+    insert(value) {
+        const newNode = new Nodo(value);
+        if (this.root === null) {
+            this.root = newNode;
+
+        } else {
+            let currentNode = this.root;
+
+            while (true) {
+                if (value < currentNode.value) {
+                    if (!currentNode.left) {
+                        currentNode.left = newNode
+                        return this
+                    }
+                    currentNode = currentNode.left;
+                } else {
+                    if (!currentNode.right) {
+                        currentNode.right = newNode;
+                        return this
+                    }
+                    currentNode = currentNode.right
+                }
+            }
+        }
+    }
+
+    search(value) {
+        const newNode = new Nodo(value);
+        if (this.root === null) {
+            return null
+        } else {
+            let currentNode = this.root;
+
+            while (true) {
+                if (value == currentNode.value) {
+                    return currentNode;
+
+                } else if (value < currentNode.value) {
+                    currentNode = currentNode.left
+
+                    if (currentNode == value) {
+                        return currentNode;
+                    }
+                } else if (value > currentNode.value) {
+                    currentNode = currentNode.right
+                    if (currentNode == value) {
+                        return currentNode;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        }
+
+    }
+
+    inOrder() {
+        let enOrden = []; //aqui guardo todos los numeros dependiendo de como se vayan acoplando o recaudadndo
+
+        function ordenar(hijo) { //funcion para ordenarlos
+            if (hijo == null) {
+                return //si sos nulo, no hagas nada y regresate para tu padre
+            }
+
+            ordenar(hijo.left) //se llama, se llama y se llama hasta que sea null.
+            enOrden.push(hijo.value) //cuando es null, se regresa al ultimo valor y lo empuja
+            ordenar(hijo.right)
+
+            //va recorriendo todas las izquierdas hasta que sea nulo,
+            //cuando llegue el caso, vuelve a la derecha.
+        }
+
+        ordenar(this.root) //el valor inicial
+        return enOrden;
+    }
+
+
+    renderizar(nodo, valorBuscado = null) {
+        if (nodo == null) {
+            return '';
+        }
+
+        let color = '';
+
+        if (valorBuscado == nodo.value) {
+            color = `<div class="node-value text-light bg-danger">${nodo.value}</div>`
+        } else {
+            color = `<div class="node-value">${nodo.value}</div>`
+        }
+
+        let izquierdo; //recursividad para todaos los nodos izquierdos
+        if (nodo.left) {
+            izquierdo = this.renderizar(nodo.left, valorBuscado)
+        } else {
+            izquierdo = `<div class="node-empty"></div>`;
+        }
+
+        let derecho; //recursividad para todos los nodos derechos
+        if (nodo.right) {
+            derecho = this.renderizar(nodo.right, valorBuscado)
+        } else {
+            derecho = `<div class="node-empty"></div>`
+        }
+
+        let html = `
+        <div class="tree-node">
+            ${color}
+            <div class="node-children">
+                ${izquierdo}
+                ${derecho}
+            </div>
+        </div>`;
+
+        return html;
+    }
+}
+
+
+let numeroAInsertar = document.querySelector('#input-insertar')
+let botonGuardar = document.querySelector('#btn-insertar')
+let contenedorTree = document.querySelector('#tree-root-container')
+let numeroABuscar = document.querySelector('#input-buscar')
+let botonBuscar = document.querySelector('#btn-buscar')
+let botonMostrar = document.querySelector('#btn-inorder')
+let modal = document.querySelector('#modalAlerta')
+let botonLimpiar = document.querySelector('#btn-eliminar')
+
+let arbolBinario = new BinaryTree()
+
+
+botonGuardar.addEventListener('click', (event) => {
+    if (numeroAInsertar.value == '') {
+        alert('Ingrese un valor dentro del campo')
+    } else {
+        arbolBinario.insert(numeroAInsertar.value)
+        contenedorTree.innerHTML = ''
+        contenedorTree.innerHTML = arbolBinario.renderizar(arbolBinario.root)
+
+    }
+})
+
+botonBuscar.addEventListener('click', (event) => {
+    //  console.log(arbolBinario.search(numeroABuscar.value))
+    if (numeroABuscar.value == '') {
+        alert('Ingrese un numero dentro del campo para poder buscarlo')
+    } else if (arbolBinario.inOrder().length == 0) {
+        alert('No tiene numeros ingresados aun')
+    } else {
+        contenedorTree.innerHTML = ''
+        contenedorTree.innerHTML = arbolBinario.renderizar(arbolBinario.root, numeroABuscar.value)
+    }
+})
+
+botonLimpiar.addEventListener('click', (event) => {
+    numeroABuscar.value = ''
+    numeroAInsertar.value = ''
+    contenedorTree.innerHTML = arbolBinario.renderizar(arbolBinario.root)
+})
+
+let index = 0
+
+botonMostrar.addEventListener('click', (event) => {
+    if (arbolBinario.inOrder().length == 0) {
+        alert('No hay valores aun')
+    } else {
+        mostrar()
+    }
+})
+
+
+
+function mostrar() {
+    let longitud = []
+    longitud = arbolBinario.inOrder()
+  //  console.log(longitud)
+    contenedorTree.innerHTML = arbolBinario.renderizar(arbolBinario.root, longitud[index])
+    //console.log(longitud[index])
+
+    setTimeout(() => {
+        if (index < longitud.length) {
+            index++
+            contenedorTree.innerHTML = ''
+            mostrar()
+        } else {
+            index = 0
+        }
+    }, 1500)
+
+}
