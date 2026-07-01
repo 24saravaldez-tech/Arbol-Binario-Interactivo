@@ -119,58 +119,21 @@ class BinaryTree {
     }
 
 
-    // renderizar(nodo, valorBuscado = null) {
-    //     if (nodo == null) {
-    //         return '';
-    //     }
-
-    //     let color = '';
-
-    //     if (valorBuscado == nodo.value) {
-    //         color = `<div class="node-value text-light bg-danger">${nodo.value}</div>`
-    //     } else {
-    //         color = `<div class="node-value">${nodo.value}</div>`
-    //     }
-
-    //     let izquierdo; //recursividad para todaos los nodos izquierdos
-    //     if (nodo.left) {
-    //         izquierdo = this.renderizar(nodo.left, valorBuscado)
-    //     } else {
-    //         izquierdo = `<div class="node-empty"></div>`;
-    //     }
-
-    //     let derecho; //recursividad para todos los nodos derechos
-    //     if (nodo.right) {
-    //         derecho = this.renderizar(nodo.right, valorBuscado)
-    //     } else {
-    //         derecho = `<div class="node-empty"></div>`
-    //     }
-
-    //     let html = `
-    //     <div class="tree-node">
-    //         ${color}
-    //         <div class="node-children">
-    //             ${izquierdo}
-    //             ${derecho}
-    //         </div>
-    //     </div>`;
-
-    //     return html;
-    // }
-
-
     renderizar(nodo, valorBuscado = null) {
         if (nodo == null) {
             return '';
         }
 
         let color = '';
+
         if (valorBuscado == nodo.value) {
             color = `<div class="node-value text-light bg-danger">${nodo.value}</div>`
         } else {
-            color = `<div class="node-value">${nodo.value}</div>`
+            color = `<div class="node-value no-tiene">${nodo.value}</div>`
         }
+
         let izquierdo;
+
         if (nodo.left) {
             izquierdo = `<div class="tree-node left-node">${this.renderizar(nodo.left, valorBuscado)}</div>`;
         } else {
@@ -178,13 +141,14 @@ class BinaryTree {
         }
 
         let derecho;
+
         if (nodo.right) {
             derecho = `<div class="tree-node right-node">${this.renderizar(nodo.right, valorBuscado)}</div>`;
         } else {
             derecho = `<div class="node-empty"></div>`;
         }
 
-    
+
         let html = `
             ${color}
             <div class="node-children">
@@ -228,6 +192,8 @@ botonBuscar.addEventListener('click', (event) => {
         alert('Ingrese un numero dentro del campo para poder buscarlo')
     } else if (arbolBinario.inOrder().length == 0) {
         alert('No tiene numeros ingresados aun')
+    } else if (arbolBinario.renderizar(arbolBinario.root, parseInt(numeroABuscar.value)).includes('no-tiene')) {
+        alert('No se encontro ninguna coincidencia')
     } else {
         contenedorTree.innerHTML = ''
         contenedorTree.innerHTML = `<div class="tree-node">${arbolBinario.renderizar(arbolBinario.root, parseInt(numeroABuscar.value))}</div>`;
@@ -237,7 +203,7 @@ botonBuscar.addEventListener('click', (event) => {
 botonLimpiar.addEventListener('click', (event) => {
     numeroABuscar.value = ''
     numeroAInsertar.value = ''
-     contenedorTree.innerHTML = `<div class="tree-node">${arbolBinario.renderizar(arbolBinario.root)}</div>`;
+    contenedorTree.innerHTML = `<div class="tree-node">${arbolBinario.renderizar(arbolBinario.root)}</div>`;
 })
 
 let index = 0
@@ -278,9 +244,7 @@ botonMostrarPre.addEventListener('click', (event) => {
 
 function mostrar(longitud) {
 
-    //  console.log(longitud)
-   contenedorTree.innerHTML = `<div class="tree-node">${arbolBinario.renderizar(arbolBinario.root, longitud[index])}</div>`;
-    //console.log(longitud[index])
+    contenedorTree.innerHTML = `<div class="tree-node">${arbolBinario.renderizar(arbolBinario.root, longitud[index])}</div>`;
 
     setTimeout(() => {
         if (index < longitud.length) {
